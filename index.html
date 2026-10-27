@@ -353,7 +353,7 @@ textarea{min-height:220px;resize:vertical;line-height:1.5}
       <button class="sample" id="sampleBtn" type="button" title="Example numbers so you can see the layout. They disappear once real stats load or you add your own." hidden>Sample data · hide</button>
       <button class="btn mood" id="moodBtn" type="button"><svg viewBox="0 0 16 16" id="moodIcon" aria-hidden="true"></svg><span id="moodLabel">Day</span></button>
       <span class="status" id="status"><i></i><b id="statusText">Offline</b></span>
-      <button class="btn" id="openEdit" type="button"><svg viewBox="0 0 16 16"><path d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Z"/></svg><span>Edit</span></button>
+      <button class="btn" id="openEdit" type="button" hidden><svg viewBox="0 0 16 16"><path d="M11.013 1.427a1.75 1.75 0 0 1 2.474 0l1.086 1.086a1.75 1.75 0 0 1 0 2.474l-8.61 8.61c-.21.21-.47.364-.756.445l-3.251.93a.75.75 0 0 1-.927-.928l.929-3.25c.081-.286.235-.547.445-.758l8.61-8.61Z"/></svg><span>Edit</span></button>
     </div>
   </header>
 
@@ -1127,7 +1127,7 @@ function buildFields(){
 }
 function openDrawer(){ buildFields(); $('f-lyrics').value=state.lyrics||PH(); $('drawer').hidden=false; $('scrim').hidden=false; $('closeEdit').focus(); }
 function closeDrawer(){ $('drawer').hidden=true; $('scrim').hidden=true; }
-$('openEdit').onclick=openDrawer; $('closeEdit').onclick=closeDrawer; $('scrim').onclick=closeDrawer;
+$('openEdit').onclick=openDrawer; if (new URLSearchParams(location.search).has('edit')) $('openEdit').hidden=false; $('closeEdit').onclick=closeDrawer; $('scrim').onclick=closeDrawer;
 function tab(w){ const s=w==='stats'; $('tabStats').setAttribute('aria-selected',s); $('tabLyrics').setAttribute('aria-selected',!s); $('paneStats').hidden=!s; $('paneLyrics').hidden=s; }
 $('tabStats').onclick=()=>tab('stats'); $('tabLyrics').onclick=()=>tab('lyrics');
 $('saveStats').onclick=()=>{ state.name=$('f-name').value.trim()||CONFIG.name;

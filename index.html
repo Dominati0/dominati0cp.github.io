@@ -1172,7 +1172,7 @@ setInterval(()=>{ if (!moodOverride) applyMood(); }, 30000);
 const pres={ lastOnline: SNAP.cf?.lastOnline || null, lastSub: SNAP.cf?.lastSub || null, live:false };
 function renderPresence(){
   const nowS=Date.now()/1000, lo=pres.lastOnline, ls=pres.lastSub;
-  const online = !!lo && nowS-lo < 300;
+  const online = (!!lo && nowS-lo < 300) || (!!ls && nowS-ls.t < 600);
   const working = online && ls && nowS-ls.t < 3600;
   const prob = ls ? `<a href="${ls.url}" target="_blank" rel="noopener">${esc(ls.name)}</a>` : '';
   let html;
@@ -1188,7 +1188,7 @@ function renderPresence(){
 async function pollPresence(){
   const h=encodeURIComponent(state.handles.codeforces);
   try {
-    const info=(await j(`https://codeforces.com/api/user.info?handles=${h}`)).result[0]; pres.lastOnline=info.lastOnlineTimeSeconds;
+    const info=(await j(`https://codeforces.com/api/user.info?handles=${h}`)).result[0]; pres.lastOnline=Math.max(pres.lastOnline||0, info.lastOnlineTimeSeconds||0);
     const s=(await j(`https://codeforces.com/api/user.status?handle=${h}&count=1`)).result[0];
     if (s) pres.lastSub={t:s.creationTimeSeconds, ok:s.verdict==='OK', name:`${s.problem.contestId}${s.problem.index} · ${s.problem.name}`, url:`https://codeforces.com/problemset/problem/${s.problem.contestId}/${s.problem.index}`};
     pres.live=true;
